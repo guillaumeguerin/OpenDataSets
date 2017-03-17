@@ -13,35 +13,15 @@ import com.ui4j.api.browser.PageConfiguration;
 import com.ui4j.api.dom.Document;
 import com.ui4j.api.dom.Element;
 
-public class Google {
+import browser.HTTPBrowser;
 
-	private BrowserEngine browser;
-    private PageConfiguration userAgent;
-    
-    public Google(BrowserEngine b, PageConfiguration p) {
-    	this.browser = b;
-    	this.userAgent = p;
-    }
-    
-    public void waitForAsyncRequestsToEnd() {
-    	try {
-			Thread.sleep(5000);
-		} 
-        catch (InterruptedException e) {
-			e.printStackTrace();
-        }
-    }
-    
-    public Page navigate(String url) {
-    	Page page = browser.navigate(url, userAgent);
-    	waitForAsyncRequestsToEnd();
-    	return page;
-    }
+public class Google {
     
     public List<String> search(String item) {
     	List<String> result = new ArrayList<String>();
     	item = item.replace(" ", "+");
-    	Page page = navigate("https://www.google.fr/search?q=" + item);
+    	HTTPBrowser b = HTTPBrowser.getInstance();
+    	Page page = b.navigate("https://www.google.fr/search?q=" + item);
         Document doc = page.getDocument();
         doc = page.getDocument();
         List<Element> as = doc.queryAll("a");
@@ -56,7 +36,8 @@ public class Google {
 
     
     public void images(String item) throws IOException {
-    	Page page = navigate("https://www.google.nl/search?tbm=isch&q=" + item);
+    	HTTPBrowser b = HTTPBrowser.getInstance();
+    	Page page = b.navigate("https://www.google.nl/search?tbm=isch&q=" + item);
 		Document doc = page.getDocument();
 		boolean stop = false;
 		File file = new File("GoogleLinks.txt");
@@ -66,7 +47,7 @@ public class Google {
 		outputImageLinks(doc, fileWriter);
 		doc.queryAll("div[id='navbar']").get(0).query("a").get().click();
 		do {
-			waitForAsyncRequestsToEnd();
+			b.waitForAsyncRequestsToEnd();
 			doc = page.getDocument();
 			outputImageLinks(doc, fileWriter);
 			Optional<Element> navBar = doc.query("div[id='navbar']");

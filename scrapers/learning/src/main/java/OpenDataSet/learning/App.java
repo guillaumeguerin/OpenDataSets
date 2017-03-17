@@ -17,7 +17,7 @@ public class App
     	BrowserEngine webkit = BrowserFactory.getWebKit();
         PageConfiguration config = new PageConfiguration();
         config.setUserAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
-        Google g = new Google(webkit, config);
+        Google g = new Google();
         g.search("saudi arabia");
     }
 }
